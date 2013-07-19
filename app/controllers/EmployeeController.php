@@ -5,16 +5,16 @@
 class EmployeeController extends BaseController
 {
 	
-	//index page of employee
+
+	//index page of employeey in which all employees are display
 	public function get_index(){
 
-		$employees = Employee::all();
-		$this->layout->pageContent = View::make("employees.index")
-									->with("employees", $employees);
+		$employees = Employee::all()->toArray();
+		return Response::json(compact('employees'));
 	}
 
 
-	//create employee
+	//create employee form
 	public function get_create(){
 
 		$this->layout->pageContent = View::make("employees.create");
@@ -33,27 +33,23 @@ class EmployeeController extends BaseController
 
 	    if ($validator->fails())
 	    {
-	        return Redirect::to("/employees/create")->withErrors($validator);
+	        return Response::json(array('errors' => $validator), 400);
 	    }
 
 		$employee = new Employee();
 		$employee->fill($data);
 		$employee->save();
 
-		return Redirect::to("/employees/personal")
-						->with("employee_id", $employee->id);
+		return Response::json(compact("employee"));
 	}
-
 
 
 	//personal form details form
 	public function get_personal(){
+
 		$employee_id = Session::get("employee_id");
-		$this->layout->pageContent = View::make("employees.personal")
-									->with("employee_id", $employee_id);
-
+		return Response::json(compact("employee_id"));
 	}
-
 
 
 	//personal details save 
@@ -70,29 +66,22 @@ class EmployeeController extends BaseController
 		$validator = Validator::make($data, $rules);
 		if($validator->fails())
 		{
-			return Redirect::to("/employees/personal")
-							->withErrors($validator)
-							->with("employee_id", $employee_id);
+			return Response::json(array('errors' => $validator), 400);
 		}
 
 		$employee_id = Input::get("employee_id");
-
 		$employee = Employee::find($employee_id);
 		$employee->fill($data);
 		$employee->save();
-
-		return Redirect::to("employees/contact")
-						->with("employee_id", $employee_id);
+		return Response::json(compact("employee"));
 	}
-
 
 
 	//contact details form
 	public function get_contact(){
 
-		$employee_id = Session::get("employee_id");
-		$this->layout->pageContent = View::make("employees.contact")
-								->with("employee_id", $employee_id);
+		$employee_id = Session::get("employee_id")->toArray();
+		return Response::json(compact("employee_id"));
 	}
 
 
@@ -107,52 +96,50 @@ class EmployeeController extends BaseController
 						);
 		$employee_id = Input::get("employee_id");
 		$validator = Validator::make($data, $rules);
-		if($validator->fails()){
-			return Redirect::to("/employees/contact")
-								->withErrors($validator)
-								->with("employee_id", $employee_id);;
+		if($validator->fails())
+		{
+			return Response::json(array('errors' => $validator), 400);
 		}
 
 		$employee = Employee::find($employee_id);
 		$employee->fill($data);
 		$employee->save();
-//		$this->layout->pageContent = View::make("employees.index");
-		return Redirect::to("/employees/index");
+		return Response::json(compact("employee"));
 	}
 
 
+	//employee show page with education, work, certificaion and attendance details
 	public function get_show($id){
 
 		$employee = Employee::with("education", "work", "certification", "attendance")
-							->find($id);
-		$this->layout->pageContent = View::make("employees.show")
-									->with("employee", $employee);
+							->find($id)
+							->toArray();
+		return Response::json(compact("employee"));
 	}
 
 
-
+	//saving attendance
+	//
 	public function get_attendance($id){
 
 		$attendance =new Attendance();
 		$today_att = Attendance::where("employee_id", $id)
 								->where("date", date("Y-m-d"))
 								->first();
-	//	dd($today_att);
-		//if employee is present then update to absent
+
 		if(!is_null($today_att) && $today_att->status == 'Present')
 		{
 			$today_att->id = $today_att->id;
 			$today_att->status = "Absent";
 			$today_att->save();
-			return Redirect::to("/employees/index");
+			return Response::json(compact("today_att"));
 		}
-		//if employee is absent then updated to present
 		elseif (!is_null($today_att) && $today_att->status == 'Absent') 
 		{
 			$today_att->id = $today_att->id;
 			$today_att->status = "Present";
 			$today_att->save();
-			return Redirect::to("/employees/index");			
+			return Response::json(compact("today_att"));			
 		}
 		else
 		{
@@ -160,7 +147,7 @@ class EmployeeController extends BaseController
 			$attendance->date = date("Y-m-d");
 			$attendance->status = "Present";
 			$attendance->save();
-			return Redirect::to("/employees/index");
+			return Response::json(compact("attendance"));
 		}
 	}
 }

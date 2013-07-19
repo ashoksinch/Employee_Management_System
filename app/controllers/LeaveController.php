@@ -6,88 +6,82 @@ class LeaveController extends BaseController
 {
 
 	
-
+	//Leave index page all leave with employee name is display with DESC order
 	public function get_index(){
 
 		$leaves = Leave::with("employee")
 						->orderBy('id','DESC')
-						->get();
-
-	//	dd($leaves);
-		$this->layout->pageContent = View::make("leaves.index")
-										->with("leaves", $leaves);
+						->get()
+						->toArray();
+		return Responce::json(compact("leaves"));
 	}
 
+
+	//Create Leave form of employee
 	public function get_create(){
 
-		$employees = Employee::all();
-		//dd($employees);
-		$this->layout->pageContent = View::make("leaves.create")
-									->with("employees", $employees);
+		$employees = Employee::all()->toArray();
+		return Responce::json(compact("employees"));
 	}
 
 
+	//saving leave of employee
 	public function post_create(){
 
 		$data = Input::get();
 		$leave = new Leave();
 		$leave->fill($data);
 		$leave->save();
-
-	//	$employee = Employee::where("id", Input::get('employee_id'))->get();
 		
 		$leave_mail = Leave::with("employee")->find($leave->id);
-
-	//	dd($employee);
+		//sending mail of created leave
 		Mail::send('leaves.create_leave', array("leave_mail" => $leave_mail), function($message)use($leave_mail)
 		{
     		$message->to($leave_mail->employee['email'], $leave_mail->employee['fname'])->subject('Your Leave is Successfully sent to Approval');
 		});
-
-		return Redirect::to("/leaves/create");
+		return Responce::json("leave");
 	}
 
+
+	//edit leave status either status is accepted or rejected
 	public function get_edit($id, $status){
 
 		$leave = Leave::with("employee")
 						->find($id);
-
-	//	dd($leave);
 		if($status == "1")
 		{
 			$data['is_approve'] = $leave->is_approve = 1;
+			//sending mail of accepted leave				
 			Mail::send('leaves.acceptmail', array("leave" => $leave), function($message)use($leave)
 			{
     			$message->to($leave->employee['email'], $leave->employee['fname'])->subject('Your Leave Accepted');
 			});
-
 		}
 
 		if($status == "-1")
 		{
 			$data['is_approve'] = $leave->is_approve = -1;
+			//sending mail of rejected leave				
 			Mail::send('leaves.rejectmail', array("leave" => $leave), function($message)use($leave)
 			{
     			$message->to($leave->employee['email'], $leave->employee['fname'])->subject('Your Leave Rejected');
 			});
-
 		}
 		$leave->save($data);
-		return Redirect::to("/leaves/index");
+		return Responce::json(compact("leave"));
 	}
 
+
+	//leave show page
 	public function get_show($id){
 
-		$leave = Leave::with("employee")->find($id);
+		$leave = Leave::with("employee")->find($id)->toArray();
 
 		$leaves = Leave::with("employee")
 						->where("employee_id", $leave->employee_id)
-						->get();
+						->get()->toArray();
 
-		$this->layout->pageContent = View::make("leaves.show")
-									->with("leave", $leave)
-									->with("leaves", $leaves);
+		return Responce::json(compact("leave", "leaves"));
 	}
 
 }
-?>

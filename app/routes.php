@@ -21,6 +21,8 @@ Route::controller("works", "WorkController");
 
 Route::controller("certifications", "CertificationController");
 
+Route::controller("salary", "SalaryController");
+
 
 //Route::controller("home", "HomeController");
 

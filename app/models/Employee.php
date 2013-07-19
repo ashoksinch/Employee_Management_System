@@ -31,5 +31,10 @@ class Employee extends Eloquent
 
 		return $this->hasMany("attendance");
 	}
+
+	public function salary(){
+
+		return $this->hasMany("salary");
+	}
 }
 ?>

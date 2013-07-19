@@ -6,24 +6,23 @@ class EducationController extends BaseController
 {
 	
 
+	//Education Index file in which all employees are display
 	public function get_index(){
-		$employees = Employee::all();
-
-		$this->layout->pageContent = View::make("educations.index")
-									->with("employees", $employees);
+		
+		$employees = Employee::all()->toArray();
+		return Response::json(compact("employees"));
 	}
 
 
+	//create education form with employee ID
 	public function get_create($id){
 
-//		$employees = Employee::all();
-		$employee = Employee::find($id);
-
-		$this->layout->pageContent = View::make("educations.create")
-									->with("employee", $employee);
+		$employee = Employee::find($id)->toArray();
+		return Response::json(compact("employee"));
 	}
 
 
+	//Saving education details of Employee
 	public function post_create(){
 
 		$data = Input::get();
@@ -38,34 +37,31 @@ class EducationController extends BaseController
 
 		if($validator->fails())
 		{
-			return Redirect::to("/educations/create/".$employee_id)->withErrors($validator);
+			return Response::json(array('errors' => $validator), 400);
 		}
 
 		$education = new Education();
 		$education->fill($data);
 		$education->save();
-
-		//$this->layout->pageContent = View::make("educations.index");
-		return Redirect::to("/employees/show/".$employee_id);
+		return Response::json(compact("education"));
 	}
 
 
+	//education edit with Education ID
 	public function get_edit($id){
 
-		$education = Education::find($id);
-		$this->layout->pageContent = View::make("educations.edit")
-									->with("education", $education);
+		$education = Education::find($id)->toArray();
+		return Response::json(compact("education"));
 	}
 
 
-
+	//saving edited education data
 	public function post_update($id){
 
 		$data = Input::get();
 		$education = Education::find($id);
 		$education->fill($data);
 		$education->save();
-
-		return Redirect::to("/employees/index");
+		return Response::json(compact("education"));
 	}
 }

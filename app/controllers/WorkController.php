@@ -5,23 +5,24 @@
 class WorkController extends BaseController
 {
 	
+
+	//Work index page in which all employees are display
 	public function get_index(){
-		$employees = Employee::all();
-		
-		$this->layout->pageContent = View::make("works.index")
-									->with("employees", $employees);
+
+		$employees = Employee::all()->toArray();
+		return Response::json(compact("employees"));
 	}
 
 
+	//Create work with Employee Id
 	public function get_create($id){
 
-	//	$employees = Employee::all();
-		$employee = Employee::find($id);
-		$this->layout->pageContent = View::make("works.create")
-									->with("employee", $employee);
+		$employee = Employee::find($id)->toArray();
+		return Response::json(compact("employee"));
 	}
 
 
+	//saving work of employee
 	public function post_create(){
 
 		$data = Input::get();
@@ -37,35 +38,31 @@ class WorkController extends BaseController
 
 		if($validator->fails())
 		{
-			return Redirect::to("/works/create/".$employee_id)->withErrors($validator);
+			return Response::json(array('errors' => $validator), 400);
 		}
 
 		$work = new Work();
 		$work->fill($data);
 		$work->save();
-
-	//	$this->layout->pageContent = View::make("works.index");
-		return Redirect::to("/employees/show/".$employee_id);
+		return Response::json(compact("work"));
 	}
 
 
+	//edit work with work ID
 	public function get_edit($id){
 
-		$work = Work::find($id);
-		$this->layout->pageContent = View::make("works.edit")
-									->with("work", $work);
+		$work = Work::find($id)->toArray();
+		return Response::json(compact("work"));
 	}
 
 
-
+	//saving edited work
 	public function post_update($id){
 
 		$data = Input::get();
 		$work = Work::find($id);
 		$work->fill($data);
 		$work->save();
-
-//		$this->layout->pageContent = View::make("/employees/show/".$work->employee_id."");
-		return Redirect::to("/employees/index");
+		return Response::json(compact("work"));
 	}
 }
