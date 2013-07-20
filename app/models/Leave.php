@@ -5,7 +5,7 @@
 class Leave extends Eloquent
 {
 	protected $table = "leaves";
-	protected $fillable = array("employee_id", "starting_date", "ending_date", "is_approve");
+	protected $fillable = array("employee_id", "stating_date", "ending_date", "is_approve");
 
 	public function employee(){
 		return $this->belongsTo("employee");
