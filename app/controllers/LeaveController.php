@@ -13,7 +13,7 @@ class LeaveController extends BaseController
 						->orderBy('id','DESC')
 						->get()
 						->toArray();
-		return Response::json(compact("leaves"));
+		return Response::json(compact("leaves"), 200);
 	}
 
 
@@ -21,8 +21,7 @@ class LeaveController extends BaseController
 	public function get_create(){
 
 		$employees = Employee::all();
-	//	return Response::json(compact("employees"));
-		$this->layout->pageContent = View::make("leaves.create")->with("employees", $employees);
+		return Response::json(compact("employees"), 200);
 	}
 
 
@@ -40,7 +39,7 @@ class LeaveController extends BaseController
 		{
     		$message->to($leave_mail->employee['email'], $leave_mail->employee['fname'])->subject('Your Leave is Successfully sent to Approval');
 		});
-		return Response::json("leave");
+		return Response::json(compact("leave"), 201);
 	}
 
 
@@ -70,7 +69,7 @@ class LeaveController extends BaseController
 			});
 		}
 		$leave->save($data);
-		return Response::json(array(), 204);
+		return Response::json(array(), 201);
 	}
 
 
@@ -83,7 +82,7 @@ class LeaveController extends BaseController
 						->where("employee_id", $leave->employee_id)
 						->get()->toArray();
 
-		return Response::json(compact("leave", "leaves"));
+		return Response::json(compact("leave", "leaves"), 200);
 	}
 
 }

@@ -11,7 +11,7 @@ class HomeController extends BaseController
 		FLOOR(datediff(CURDATE(), dob) / 365) != FLOOR(datediff(DATE_ADD(CURDATE(), interval 15 day), dob) / 365)
 		");
 
-		return Response::json(compact("employees"));
+		return Response::json(compact("employees"), 200);
 	}
 
 }

@@ -10,7 +10,7 @@ class EmployeeController extends BaseController
 	public function get_index(){
 
 		$employees = Employee::all()->toArray();
-		return Response::json(compact('employees'));
+		return Response::json(compact('employees'), 200);
 	}
 
 
@@ -18,6 +18,7 @@ class EmployeeController extends BaseController
 	public function get_create(){
 
 		$this->layout->pageContent = View::make("employees.create");
+		
 	}
 
 
@@ -40,7 +41,7 @@ class EmployeeController extends BaseController
 		$employee->fill($data);
 		$employee->save();
 
-		return Response::json(compact("employee"));
+		return Response::json(compact("employee"), 201);
 	}
 
 
@@ -48,7 +49,7 @@ class EmployeeController extends BaseController
 	public function get_personal(){
 
 		$employee_id = Session::get("employee_id");
-		return Response::json(compact("employee_id"));
+		return Response::json(compact("employee_id"), 200);
 	}
 
 
@@ -73,7 +74,7 @@ class EmployeeController extends BaseController
 		$employee = Employee::find($employee_id);
 		$employee->fill($data);
 		$employee->save();
-		return Response::json(compact("employee"));
+		return Response::json(compact("employee"), 201);
 	}
 
 
@@ -81,7 +82,7 @@ class EmployeeController extends BaseController
 	public function get_contact(){
 
 		$employee_id = Session::get("employee_id")->toArray();
-		return Response::json(compact("employee_id"));
+		return Response::json(compact("employee_id"), 200);
 	}
 
 
@@ -104,7 +105,7 @@ class EmployeeController extends BaseController
 		$employee = Employee::find($employee_id);
 		$employee->fill($data);
 		$employee->save();
-		return Response::json(compact("employee"));
+		return Response::json(compact("employee"), 201);
 	}
 
 
@@ -112,9 +113,9 @@ class EmployeeController extends BaseController
 	public function get_show($id){
 
 		$employee = Employee::with("education", "work", "certification", "attendance")
-							->find($id)
-							->toArray();
-		return Response::json(compact("employee"));
+							->find($id);
+		//dd($employee);
+		return Response::json(compact("employee"), 200);
 		//$this->layout->pageContent = View::make("employees.show")
 		//							->with("employee", $employee);
 	}
@@ -134,14 +135,14 @@ class EmployeeController extends BaseController
 			$today_att->id = $today_att->id;
 			$today_att->status = "Absent";
 			$today_att->save();
-			return Response::json(compact("today_att"));
+			return Response::json(compact("today_att"), 201);
 		}
 		elseif (!is_null($today_att) && $today_att->status == 'Absent') 
 		{
 			$today_att->id = $today_att->id;
 			$today_att->status = "Present";
 			$today_att->save();
-			return Response::json(compact("today_att"));			
+			return Response::json(compact("today_att"), 201);			
 		}
 		else
 		{
@@ -149,7 +150,7 @@ class EmployeeController extends BaseController
 			$attendance->date = date("Y-m-d");
 			$attendance->status = "Present";
 			$attendance->save();
-			return Response::json(compact("attendance"));
+			return Response::json(compact("attendance"), 201);
 		}
 	}
 }

@@ -10,7 +10,7 @@ class EducationController extends BaseController
 	public function get_index(){
 		
 		$employees = Employee::all()->toArray();
-		return Response::json(compact("employees"));
+		return Response::json(compact("employees"), 200);
 	}
 
 
@@ -18,7 +18,7 @@ class EducationController extends BaseController
 	public function get_create($id){
 
 		$employee = Employee::find($id)->toArray();
-		return Response::json(compact("employee"));
+		return Response::json(compact("employee"), 200);
 	}
 
 
@@ -43,7 +43,7 @@ class EducationController extends BaseController
 		$education = new Education();
 		$education->fill($data);
 		$education->save();
-		return Response::json(compact("education"));
+		return Response::json(compact("education"), 201);
 	}
 
 
@@ -51,7 +51,7 @@ class EducationController extends BaseController
 	public function get_edit($id){
 
 		$education = Education::find($id)->toArray();
-		return Response::json(compact("education"));
+		return Response::json(compact("education"), 200);
 	}
 
 
@@ -62,6 +62,6 @@ class EducationController extends BaseController
 		$education = Education::find($id);
 		$education->fill($data);
 		$education->save();
-		return Response::json(compact("education"));
+		return Response::json(compact("education"), 201);
 	}
 }

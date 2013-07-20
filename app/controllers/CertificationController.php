@@ -10,7 +10,7 @@ class CertificationController extends BaseController
 	public function get_index(){
 
 		$employees = Employee::all()->toArray();
-		return Response::json(compact('employees'));
+		return Response::json(compact('employees'), 200);
 	}
 
 
@@ -18,7 +18,7 @@ class CertificationController extends BaseController
 	public function get_create($id){
 
 		$employee = Employee::find($id)->toArray();
-		return Response::json(compact("employee"));
+		return Response::json(compact("employee"), 200);
 	}
 
 
@@ -41,7 +41,7 @@ class CertificationController extends BaseController
 		$certification->fill($data);
 		$certification->save();
 
-		return Response::json(compact('certification'));
+		return Response::json(compact('certification'), 201);
 	}
 
 
@@ -49,7 +49,7 @@ class CertificationController extends BaseController
 	public function get_edit($id){
 
 		$certification = Certification::find($id)->toArray();
-		return Response::json(compact("certification"));
+		return Response::json(compact("certification"), 200);
 	}
 
 
@@ -61,6 +61,6 @@ class CertificationController extends BaseController
 		$certification->fill($data);
 		$certification->save();
 
-		return Response::json(compact('certification'));
+		return Response::json(compact('certification'), 201);
 	}
 }

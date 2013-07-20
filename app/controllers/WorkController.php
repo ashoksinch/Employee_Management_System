@@ -10,7 +10,7 @@ class WorkController extends BaseController
 	public function get_index(){
 
 		$employees = Employee::all()->toArray();
-		return Response::json(compact("employees"));
+		return Response::json(compact("employees"), 200);
 	}
 
 
@@ -18,7 +18,7 @@ class WorkController extends BaseController
 	public function get_create($id){
 
 		$employee = Employee::find($id)->toArray();
-		return Response::json(compact("employee"));
+		return Response::json(compact("employee"), 200);
 	}
 
 
@@ -44,7 +44,7 @@ class WorkController extends BaseController
 		$work = new Work();
 		$work->fill($data);
 		$work->save();
-		return Response::json(compact("work"));
+		return Response::json(compact("work"), 201);
 	}
 
 
@@ -52,7 +52,7 @@ class WorkController extends BaseController
 	public function get_edit($id){
 
 		$work = Work::find($id)->toArray();
-		return Response::json(compact("work"));
+		return Response::json(compact("work"), 200);
 	}
 
 
@@ -63,6 +63,6 @@ class WorkController extends BaseController
 		$work = Work::find($id);
 		$work->fill($data);
 		$work->save();
-		return Response::json(compact("work"));
+		return Response::json(compact("work"), 201);
 	}
 }
