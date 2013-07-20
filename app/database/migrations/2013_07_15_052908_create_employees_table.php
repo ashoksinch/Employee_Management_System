@@ -15,7 +15,7 @@ class CreateEmployeesTable extends Migration {
 			$table->increments("id");
 			$table->string("fname");
 			$table->string("lname");
-			$table->text("email");
+			$table->string("email");
 			$table->timestamps();
 		});
 	}
