@@ -14,7 +14,7 @@ class CreateAddleaveTable extends Migration {
 		Schema::create("leaves", function($table){
 			$table->increments("id");
 			$table->integer("employee_id");
-			$table->date("stating_date");
+			$table->date("starting_date");
 			$table->date("ending_date");
 			$table->integer("is_approve");
 			$table->timestamps();
