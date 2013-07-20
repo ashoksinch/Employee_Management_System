@@ -10,6 +10,6 @@ class Salary extends Eloquent
 
 	public function employee(){
 
-		return $this->belongTo("employee");
+		return $this->belongsTo("employee");
 	}
 }
