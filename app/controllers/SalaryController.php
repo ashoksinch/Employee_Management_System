@@ -5,14 +5,17 @@
 class SalaryController extends BaseController
 {
 	
+
+	//index page of salary in with all salary belongso with employees are display
 	public function get_index(){
 
-		$employees = Employee::all();
+		$salaries = Salary::with("employee")->get();		
 		$this->layout->pageContent = View::make("salary.index")
-								->with("employees", $employees);
+								->with("salaries", $salaries);
 	}
 
 
+	//create salary form
 	public function get_create(){
 
 		$employees = Employee::all();		
@@ -21,6 +24,7 @@ class SalaryController extends BaseController
 	}
 
 
+	//saving salary to database
 	public function post_create(){
 
 		$data = Input::get();
