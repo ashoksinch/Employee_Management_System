@@ -11,7 +11,7 @@
 
 	<div>
 		<label>From Date</label>
-		<input type="text" name="starting_date"/>
+		<input type="text" name="stating_date"/>
 	</div>
 	<div>
 		<label>To Date</label>
