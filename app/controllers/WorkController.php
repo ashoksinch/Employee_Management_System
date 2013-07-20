@@ -38,7 +38,7 @@ class WorkController extends BaseController
 
 		if($validator->fails())
 		{
-			return Response::json(array('errors' => $validator), 400);
+			return Response::json(array('errors' => $validator->messages), 400);
 		}
 
 		$work = new Work();

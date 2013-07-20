@@ -34,7 +34,7 @@ class EmployeeController extends BaseController
 
 	    if ($validator->fails())
 	    {
-	        return Response::json(array('errors' => $validator), 400);
+	        return Response::json(array('errors' => $validator->messages), 400);
 	    }
 
 		$employee = new Employee();
@@ -67,7 +67,7 @@ class EmployeeController extends BaseController
 		$validator = Validator::make($data, $rules);
 		if($validator->fails())
 		{
-			return Response::json(array('errors' => $validator), 400);
+			return Response::json(array('errors' => $validator->messages), 400);
 		}
 
 		$employee_id = Input::get("employee_id");
@@ -99,7 +99,7 @@ class EmployeeController extends BaseController
 		$validator = Validator::make($data, $rules);
 		if($validator->fails())
 		{
-			return Response::json(array('errors' => $validator), 400);
+			return Response::json(array('errors' => $validator->messages), 400);
 		}
 
 		$employee = Employee::find($employee_id);

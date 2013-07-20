@@ -35,7 +35,7 @@ class CertificationController extends BaseController
 		$employee_id = Input::get("employee_id");
 		if($validator->fails())
 		{
-			return Response::json(array('errors' => $validator), 400);
+			return Response::json(array('errors' => $validator->messages), 400);
 		}
 		$certification = new Certification();
 		$certification->fill($data);
