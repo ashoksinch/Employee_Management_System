@@ -115,6 +115,8 @@ class EmployeeController extends BaseController
 							->find($id)
 							->toArray();
 		return Response::json(compact("employee"));
+		//$this->layout->pageContent = View::make("employees.show")
+		//							->with("employee", $employee);
 	}
 
 
